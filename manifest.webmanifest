@@ -1,13 +1,38 @@
 {
-  "name": "SUUMIN | LINEへ",
-  "short_name": "SUUMIN",
-  "start_url": "./index.html",
-  "scope": "./",
+  "name": "契約情報 回答フォーム",
+  "short_name": "契約フォーム",
+  "description": "営業担当名・顧客名・物件情報・契約日/起算日・手数料/ADをサクッと送れる回答フォーム",
+  "start_url": "/support-suumin-contract/",
+  "scope": "/support-suumin-contract/",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#06C755",
+  "background_color": "#f7faf8",
+  "theme_color": "#1f9d63",
+  "lang": "ja",
+  "orientation": "portrait",
   "icons": [
-    { "src": "./icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
-    { "src": "./icons/icon-512.png", "sizes": "512x512", "type": "image/png" }
+    {
+      "src": "/support-suumin-contract/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/support-suumin-contract/icons/icon-192-maskable.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/support-suumin-contract/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/support-suumin-contract/icons/icon-512-maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
   ]
 }
