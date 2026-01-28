@@ -595,6 +595,7 @@
 
         <div class="section contact-section">
           <div class="section-title">契約日・契約開始日 <span class="opt">任意</span></div>
+          <div class="hint small" style="margin:-6px 0 10px;">未定の場合は空欄にし、確定後に再度入力してください。</div>
 
           <div class="date-block">
             <div class="date-grid">
@@ -618,10 +619,6 @@
                   <div class="hint small">契約にあたり特筆事項があれば記入してください。</div>
                 </div>
               </div>
-            </div>
-
-            <div class="hint small" style="margin-top:10px;">
-              未定の場合は空欄にし、<br>確定後に再度入力してください。
             </div>
           </div>
         </div>
@@ -841,7 +838,6 @@
           "adPercent","adClaimYen"
         ].forEach(k => showError(k, false));
 
-        // 任意項目（契約日/開始日）はエラー表示しない運用なので、ここでも触らない
         msg.textContent = "";
       });
     })();
