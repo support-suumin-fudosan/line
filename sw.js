@@ -1,38 +1,61 @@
-const CACHE_NAME = "suumin-line-v1";
+const CACHE_NAME = "contract-form-v1";
+const BASE = "/support-suumin-contract/";
+
 const ASSETS = [
-  "./",
-  "./index.html",
-  "./manifest.webmanifest",
-  "./sw.js",
-  "./icons/icon-192.png",
-  "./icons/icon-512.png"
+  BASE,
+  BASE + "index.html",
+  BASE + "manifest.webmanifest",
 ];
 
 self.addEventListener("install", (event) => {
+  self.skipWaiting();
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS)).then(() => self.skipWaiting())
+    caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS))
   );
 });
 
 self.addEventListener("activate", (event) => {
   event.waitUntil(
-    caches.keys().then(keys =>
-      Promise.all(keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k)))
-    ).then(() => self.clients.claim())
+    Promise.all([
+      caches.keys().then((keys) =>
+        Promise.all(
+          keys.map((key) => (key !== CACHE_NAME ? caches.delete(key) : null))
+        )
+      ),
+      self.clients.claim(),
+    ])
   );
 });
 
+// HTMLはネット優先、それ以外はキャッシュ優先
 self.addEventListener("fetch", (event) => {
   const req = event.request;
+  const url = new URL(req.url);
+
+  if (req.method !== "GET") return;
+
+  // このプロジェクト配下だけ扱う
+  if (!url.pathname.startsWith(BASE)) return;
+
+  // ページ遷移（HTML）は network-first
+  if (req.mode === "navigate" || req.destination === "document") {
+    event.respondWith(
+      fetch(req).catch(() => caches.match(BASE + "index.html"))
+    );
+    return;
+  }
+
+  // その他のGETは cache-first
   event.respondWith(
-    caches.match(req).then(cached => cached || fetch(req).then(res => {
-      // 同一オリジンだけ軽くキャッシュ（任意）
-      const url = new URL(req.url);
-      if (url.origin === location.origin && req.method === "GET") {
-        const copy = res.clone();
-        caches.open(CACHE_NAME).then(cache => cache.put(req, copy)).catch(()=>{});
-      }
-      return res;
-    }).catch(() => cached))
+    caches.match(req).then((cached) => {
+      return (
+        cached ||
+        fetch(req).then((res) => {
+          const clone = res.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(req, clone));
+          return res;
+        })
+      );
+    })
   );
 });
