@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>契約情報 回答フォーム</title>
-  <meta name="description" content="契約情報を1分ほどで入力できる回答フォームです。" />
+  <meta name="description" content="契約情報を入力できる回答フォームです。" />
 
   <style>
     :root{
@@ -29,9 +29,6 @@
       width: 100%;
       max-width: 100%;
       overflow-x: hidden;
-    }
-
-    html, body{
       margin: 0;
       padding: 0;
       font-family: system-ui, -apple-system, "Hiragino Kaku Gothic ProN", "Noto Sans JP", "Segoe UI", sans-serif;
@@ -128,29 +125,6 @@
       display: none;
     }
 
-    .brand-license{
-      display: block;
-      font-size: 10px;
-      color: var(--muted);
-      margin-top: 2px;
-      letter-spacing: 0.02em;
-    }
-
-    .pill-note{
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: #fff;
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      padding: 6px 10px;
-      font-size: 11px;
-      color: var(--muted);
-      margin-top: 8px;
-      white-space: nowrap;
-      flex: 0 0 auto;
-    }
-
     .container{
       width: 100%;
       max-width: 920px;
@@ -227,21 +201,21 @@
     }
 
     .section{
-      padding: 18px 22px 6px;
+      padding: 20px 22px 8px;
       border-top: 1px dashed rgba(0,0,0,0.06);
     }
     .section:first-child{ border-top: none; }
 
     .section.contact-section{
       border-top: 1px dotted rgba(0,0,0,0.14);
-      padding-top: 16px;
+      padding-top: 18px;
     }
 
     .section-title{
       display: flex;
       align-items: baseline;
       gap: 8px;
-      margin: 0 0 12px;
+      margin: 0 0 10px;
       font-size: 15px;
       font-weight: 700;
     }
@@ -254,12 +228,17 @@
     .field{
       display: grid;
       gap: 8px;
-      margin-bottom: 14px;
+      margin-bottom: 16px;
       min-width: 0;
     }
 
+    .field.compact{
+      margin-bottom: 14px;
+    }
+
     input[type="text"],
-    input[type="date"]{
+    input[type="date"],
+    input[type="number"]{
       width: 100%;
       border: 1px solid var(--line);
       border-radius: var(--radius-md);
@@ -271,9 +250,7 @@
       max-width: 100%;
     }
 
-    input::placeholder{
-      color: #9aa3af;
-    }
+    input::placeholder{ color: #9aa3af; }
 
     input:focus{
       border-color: rgba(31,157,99,0.55);
@@ -290,9 +267,76 @@
       .grid-2{ grid-template-columns: 1fr 1fr; }
     }
 
+    /* 横並びの式入力 */
+    .calc-block{
+      border: 1px solid rgba(0,0,0,0.06);
+      background: linear-gradient(135deg, #ffffff, #ffffff 60%, rgba(31,157,99,0.06));
+      border-radius: var(--radius-md);
+      padding: 12px;
+    }
+
+    .calc-row{
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+      align-items: center;
+    }
+    @media (min-width: 720px){
+      .calc-row{ grid-template-columns: 1fr 1fr 1fr; }
+    }
+
+    .mini-label{
+      font-size: 12px;
+      color: #374151;
+      font-weight: 700;
+      margin: 0 0 6px;
+    }
+
+    .input-wrap{
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+    }
+
+    .unit{
+      flex: 0 0 auto;
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      padding: 2px 6px;
+      border-radius: 999px;
+      background: rgba(15,23,42,0.04);
+      border: 1px solid rgba(0,0,0,0.06);
+    }
+
+    .op{
+      display: none;
+    }
+    @media (min-width: 720px){
+      .op{
+        display: block;
+        text-align: center;
+        color: var(--muted);
+        font-weight: 800;
+        letter-spacing: 0.06em;
+        font-size: 12px;
+        padding-top: 18px;
+      }
+    }
+
     .hint{
       font-size: 11.5px;
       color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .error{
+      color: var(--danger);
+      font-size: 11.5px;
+      font-weight: 600;
+      display: none;
     }
 
     .actions{
@@ -306,7 +350,7 @@
       border-radius: 14px;
       padding: 14px 14px;
       font-size: 16px;
-      font-weight: 700;
+      font-weight: 800;
       cursor: pointer;
       transition: transform .08s ease, filter .15s ease, box-shadow .15s ease;
     }
@@ -322,13 +366,6 @@
       background: #fff;
       border: 1px solid var(--line);
       color: #111827;
-    }
-
-    .error{
-      color: var(--danger);
-      font-size: 11.5px;
-      font-weight: 600;
-      display: none;
     }
 
     footer{
@@ -386,7 +423,7 @@
 
     .done-kicker{
       font-size: 11.5px;
-      font-weight: 700;
+      font-weight: 800;
       color: var(--accent-2);
       letter-spacing: 0.08em;
       margin-bottom: 2px;
@@ -408,7 +445,7 @@
     .thankyou-secondary{
       font-size: 12.5px;
       color: #556070;
-      font-weight: 600;
+      font-weight: 700;
       margin: 0;
     }
 
@@ -437,10 +474,8 @@
 
             <div>
               <div>契約情報 回答フォーム</div>
-              <span class="brand-license">東京都知事免許（2）第101896号</span>
             </div>
           </div>
-          <div class="pill-note">約1分で入力</div>
         </div>
 
         <div class="header-thanks" id="headerThanks">
@@ -453,10 +488,8 @@
       <section class="hero" id="heroSection">
         <div class="hero-head">
           <span class="meta">契約情報をご入力ください</span>
-          <h1>必要項目だけ<br>サクッと回答</h1>
-          <p>
-            営業担当名・顧客名・物件名・仲介手数料・AD・契約日・契約開始日（起算日）をまとめて送れます。
-          </p>
+          <h1>契約おめでとう🎉</h1>
+          <p>必ず物件の図面・お客様とのやりとりを確認したうえで入力してください。</p>
         </div>
       </section>
 
@@ -493,58 +526,112 @@
         <div class="section">
           <div class="field">
             <div class="section-title">営業担当名 <span class="req">必須</span></div>
-            <input id="salesName" name="salesName" type="text" placeholder="例：ネオ" required />
+            <input id="salesName" name="salesName" type="text" required />
             <div class="error" data-error-for="salesName">営業担当名を入力してください。</div>
           </div>
 
           <div class="grid-2">
             <div class="field">
               <div class="section-title">顧客名 <span class="req">必須</span></div>
-              <input id="customerName" name="customerName" type="text" placeholder="例：山田 太郎" required />
+              <input id="customerName" name="customerName" type="text" required />
               <div class="error" data-error-for="customerName">顧客名を入力してください。</div>
             </div>
 
             <div class="field">
               <div class="section-title">物件名 <span class="req">必須</span></div>
-              <input id="propertyName" name="propertyName" type="text" placeholder="例：RELUXIA隅田八広 403" required />
+              <input id="propertyName" name="propertyName" type="text" placeholder="例：RELUXIA隅田八広" required />
               <div class="error" data-error-for="propertyName">物件名を入力してください。</div>
             </div>
           </div>
 
           <div class="grid-2">
-            <div class="field">
-              <div class="section-title">仲介手数料 <span class="req">必須</span></div>
-              <input
-                id="brokerFee"
-                name="brokerFee"
-                type="text"
-                inputmode="decimal"
-                placeholder="例：賃料1ヶ月 / 55,000円 / 0円 など"
-                required
-              />
-              <div class="hint">金額 or 「賃料◯ヶ月」など、自由入力でOKです。</div>
-              <div class="error" data-error-for="brokerFee">仲介手数料を入力してください。</div>
+            <div class="field compact">
+              <div class="section-title">号室 <span class="req">必須</span></div>
+              <input id="roomNo" name="roomNo" type="text" placeholder="例：403" required />
+              <div class="error" data-error-for="roomNo">号室を入力してください。</div>
+            </div>
+            <div></div>
+          </div>
+
+          <div class="field" style="margin-top:2px;">
+            <div class="section-title">仲介手数料 <span class="req">必須</span></div>
+
+            <div class="calc-block">
+              <div class="calc-row">
+                <div>
+                  <div class="mini-label">入力枠（円）</div>
+                  <div class="input-wrap">
+                    <input id="brokerFeeBaseYen" name="brokerFeeBaseYen" type="number" inputmode="numeric" min="0" step="1" required />
+                    <span class="unit">円</span>
+                  </div>
+                </div>
+
+                <div class="op">−</div>
+
+                <div>
+                  <div class="mini-label">入力枠（円）割引</div>
+                  <div class="input-wrap">
+                    <input id="brokerFeeDiscountYen" name="brokerFeeDiscountYen" type="number" inputmode="numeric" min="0" step="1" required />
+                    <span class="unit">円</span>
+                  </div>
+                </div>
+
+                <div class="op">＝</div>
+
+                <div>
+                  <div class="mini-label">入力枠（円）請求</div>
+                  <div class="input-wrap">
+                    <input id="brokerFeeClaimYen" name="brokerFeeClaimYen" type="number" inputmode="numeric" min="0" step="1" required />
+                    <span class="unit">円</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="hint" style="margin-top:10px;">
+                「入力枠」円から「入力枠」円割引し、「入力枠」請求する。
+              </div>
             </div>
 
-            <div class="field">
-              <div class="section-title">AD <span class="req">必須</span></div>
-              <input
-                id="adFee"
-                name="adFee"
-                type="text"
-                inputmode="decimal"
-                placeholder="例：1ヶ月 / 0.5ヶ月 / なし など"
-                required
-              />
-              <div class="hint">ADが無い場合は「なし」でもOKです。</div>
-              <div class="error" data-error-for="adFee">ADを入力してください。</div>
+            <div class="error" data-error-for="brokerFeeBaseYen">仲介手数料（入力枠）を入力してください。</div>
+            <div class="error" data-error-for="brokerFeeDiscountYen">割引額を入力してください。</div>
+            <div class="error" data-error-for="brokerFeeClaimYen">請求額を入力してください。</div>
+          </div>
+
+          <div class="field">
+            <div class="section-title">AD <span class="req">必須</span></div>
+
+            <div class="calc-block">
+              <div class="calc-row" style="grid-template-columns: 1fr; gap: 12px;">
+                <div class="grid-2" style="gap:12px;">
+                  <div>
+                    <div class="mini-label">入力枠（%）</div>
+                    <div class="input-wrap">
+                      <input id="adPercent" name="adPercent" type="number" inputmode="decimal" min="0" step="0.01" required />
+                      <span class="unit">%</span>
+                    </div>
+                  </div>
+
+                  <div>
+                    <div class="mini-label">入力枠（円）請求</div>
+                    <div class="input-wrap">
+                      <input id="adClaimYen" name="adClaimYen" type="number" inputmode="numeric" min="0" step="1" required />
+                      <span class="unit">円</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="hint">
+                  「入力枠」%で「入力枠」円請求する。
+                </div>
+              </div>
             </div>
+
+            <div class="error" data-error-for="adPercent">AD（%）を入力してください。</div>
+            <div class="error" data-error-for="adClaimYen">AD（円）を入力してください。</div>
           </div>
         </div>
 
         <div class="section contact-section">
-          <div class="section-title">日付情報</div>
-
           <div class="grid-2">
             <div class="field">
               <div class="section-title">契約日 <span class="req">必須</span></div>
@@ -612,23 +699,34 @@
         return `${y}-${m}-${day} ${h}:${min}:${s}`;
       };
 
-      const formatDate = (v) => (v || "").trim();
-
       const clean = (s) => String(s ?? "").replace(/[\r\n]+/g, " ").trim();
 
       const validators = {
         salesName: () => form.salesName.value.trim().length > 0,
         customerName: () => form.customerName.value.trim().length > 0,
         propertyName: () => form.propertyName.value.trim().length > 0,
-        brokerFee: () => form.brokerFee.value.trim().length > 0,
-        adFee: () => form.adFee.value.trim().length > 0,
+        roomNo: () => form.roomNo.value.trim().length > 0,
+
+        brokerFeeBaseYen: () => form.brokerFeeBaseYen.value !== "" && Number(form.brokerFeeBaseYen.value) >= 0,
+        brokerFeeDiscountYen: () => form.brokerFeeDiscountYen.value !== "" && Number(form.brokerFeeDiscountYen.value) >= 0,
+        brokerFeeClaimYen: () => form.brokerFeeClaimYen.value !== "" && Number(form.brokerFeeClaimYen.value) >= 0,
+
+        adPercent: () => form.adPercent.value !== "" && Number(form.adPercent.value) >= 0,
+        adClaimYen: () => form.adClaimYen.value !== "" && Number(form.adClaimYen.value) >= 0,
+
         contractDate: () => !!form.contractDate.value,
         startDate: () => !!form.startDate.value
       };
 
       const validateAll = () => {
         let ok = true;
-        const keys = ["salesName","customerName","propertyName","brokerFee","adFee","contractDate","startDate"];
+        const keys = [
+          "salesName","customerName","propertyName","roomNo",
+          "brokerFeeBaseYen","brokerFeeDiscountYen","brokerFeeClaimYen",
+          "adPercent","adClaimYen",
+          "contractDate","startDate"
+        ];
+
         keys.forEach(k => showError(k, false));
 
         keys.forEach(k => {
@@ -638,6 +736,7 @@
             ok = false;
           }
         });
+
         return ok;
       };
 
@@ -648,12 +747,17 @@
           salesName: clean(form.salesName.value),
           customerName: clean(form.customerName.value),
           propertyName: clean(form.propertyName.value),
+          roomNo: clean(form.roomNo.value),
 
-          brokerFee: clean(form.brokerFee.value),
-          adFee: clean(form.adFee.value),
+          brokerFeeBaseYen: String(form.brokerFeeBaseYen.value ?? "").trim(),
+          brokerFeeDiscountYen: String(form.brokerFeeDiscountYen.value ?? "").trim(),
+          brokerFeeClaimYen: String(form.brokerFeeClaimYen.value ?? "").trim(),
 
-          contractDate: formatDate(form.contractDate.value),
-          startDate: formatDate(form.startDate.value)
+          adPercent: String(form.adPercent.value ?? "").trim(),
+          adClaimYen: String(form.adClaimYen.value ?? "").trim(),
+
+          contractDate: String(form.contractDate.value ?? "").trim(),
+          startDate: String(form.startDate.value ?? "").trim()
         };
       };
 
@@ -686,27 +790,27 @@
       };
 
       const wireLiveClear = () => {
-        form.salesName.addEventListener("input", () => {
-          if (validators.salesName()) showError("salesName", false);
-        });
-        form.customerName.addEventListener("input", () => {
-          if (validators.customerName()) showError("customerName", false);
-        });
-        form.propertyName.addEventListener("input", () => {
-          if (validators.propertyName()) showError("propertyName", false);
-        });
-        form.brokerFee.addEventListener("input", () => {
-          if (validators.brokerFee()) showError("brokerFee", false);
-        });
-        form.adFee.addEventListener("input", () => {
-          if (validators.adFee()) showError("adFee", false);
-        });
-        form.contractDate.addEventListener("change", () => {
-          if (validators.contractDate()) showError("contractDate", false);
-        });
-        form.startDate.addEventListener("change", () => {
-          if (validators.startDate()) showError("startDate", false);
-        });
+        const bind = (el, key, evt="input") => {
+          if (!el) return;
+          el.addEventListener(evt, () => {
+            if (validators[key]()) showError(key, false);
+          });
+        };
+
+        bind(form.salesName, "salesName");
+        bind(form.customerName, "customerName");
+        bind(form.propertyName, "propertyName");
+        bind(form.roomNo, "roomNo");
+
+        bind(form.brokerFeeBaseYen, "brokerFeeBaseYen");
+        bind(form.brokerFeeDiscountYen, "brokerFeeDiscountYen");
+        bind(form.brokerFeeClaimYen, "brokerFeeClaimYen");
+
+        bind(form.adPercent, "adPercent");
+        bind(form.adClaimYen, "adClaimYen");
+
+        bind(form.contractDate, "contractDate", "change");
+        bind(form.startDate, "startDate", "change");
       };
       wireLiveClear();
 
@@ -745,8 +849,13 @@
       });
 
       form.addEventListener("reset", () => {
-        ["salesName","customerName","propertyName","brokerFee","adFee","contractDate","startDate"]
-          .forEach(k => showError(k, false));
+        [
+          "salesName","customerName","propertyName","roomNo",
+          "brokerFeeBaseYen","brokerFeeDiscountYen","brokerFeeClaimYen",
+          "adPercent","adClaimYen",
+          "contractDate","startDate"
+        ].forEach(k => showError(k, false));
+
         msg.textContent = "";
       });
     })();
