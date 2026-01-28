@@ -492,7 +492,7 @@
                 <div class="error" data-error-for="customerName">顧客名を入力してください。</div>
               </div>
 
-              <!-- 追加：顧客LINE名（任意） -->
+              <!-- 顧客LINE名（任意） -->
               <div class="field narrow" style="margin-top:-4px;">
                 <div class="section-title">顧客LINE名 <span class="opt">任意</span></div>
                 <input id="customerLineName" name="customerLineName" type="text" />
@@ -594,19 +594,21 @@
         </div>
 
         <div class="section contact-section">
-          <div class="section-title">契約日・契約開始日 <span class="req">必須</span></div>
+          <div class="section-title">契約日・契約開始日 <span class="opt">任意</span></div>
 
           <div class="date-block">
             <div class="date-grid">
               <div class="date-field">
                 <div class="mini-label">契約日</div>
-                <input id="contractDate" name="contractDate" type="date" required />
+                <input id="contractDate" name="contractDate" type="date" />
+                <!-- 任意化のため、エラーは保持しても表示されません -->
                 <div class="error" data-error-for="contractDate">契約日を選択してください。</div>
               </div>
 
               <div class="date-field">
                 <div class="mini-label">契約開始日（起算日）</div>
-                <input id="startDate" name="startDate" type="date" required />
+                <input id="startDate" name="startDate" type="date" />
+                <!-- 任意化のため、エラーは保持しても表示されません -->
                 <div class="error" data-error-for="startDate">契約開始日（起算日）を選択してください。</div>
 
                 <!-- 追加：備考 -->
@@ -616,6 +618,10 @@
                   <div class="hint small">契約にあたり特筆事項があれば記入してください。</div>
                 </div>
               </div>
+            </div>
+
+            <div class="hint small" style="margin-top:10px;">
+              未定の場合は空欄にし、<br>確定後に再度入力してください。
             </div>
           </div>
         </div>
@@ -674,6 +680,11 @@
 
       const clean = (s) => String(s ?? "").replace(/[\r\n]+/g, " ").trim();
 
+      const toUndecided = (v) => {
+        const s = String(v ?? "").trim();
+        return s ? s : "未定";
+      };
+
       const validators = {
         salesName: () => form.salesName.value.trim().length > 0,
         customerName: () => form.customerName.value.trim().length > 0,
@@ -685,10 +696,9 @@
         brokerFeeClaimYen: () => form.brokerFeeClaimYen.value !== "" && Number(form.brokerFeeClaimYen.value) >= 0,
 
         adPercent: () => form.adPercent.value !== "" && Number(form.adPercent.value) >= 0,
-        adClaimYen: () => form.adClaimYen.value !== "" && Number(form.adClaimYen.value) >= 0,
+        adClaimYen: () => form.adClaimYen.value !== "" && Number(form.adClaimYen.value) >= 0
 
-        contractDate: () => !!form.contractDate.value,
-        startDate: () => !!form.startDate.value
+        // contractDate / startDate は任意化のためバリデーション対象外
       };
 
       const validateAll = () => {
@@ -696,8 +706,7 @@
         const keys = [
           "salesName","customerName","propertyName","roomNo",
           "brokerFeeBaseYen","brokerFeeDiscountYen","brokerFeeClaimYen",
-          "adPercent","adClaimYen",
-          "contractDate","startDate"
+          "adPercent","adClaimYen"
         ];
 
         keys.forEach(k => showError(k, false));
@@ -731,8 +740,9 @@
           adPercent: String(form.adPercent.value ?? "").trim(),
           adClaimYen: String(form.adClaimYen.value ?? "").trim(),
 
-          contractDate: String(form.contractDate.value ?? "").trim(),
-          startDate: String(form.startDate.value ?? "").trim(),
+          // 未入力ならメール上は「未定」
+          contractDate: toUndecided(form.contractDate.value),
+          startDate: toUndecided(form.startDate.value),
 
           notes: clean(form.notes.value)
         };
@@ -786,8 +796,7 @@
         bind(form.adPercent, "adPercent");
         bind(form.adClaimYen, "adClaimYen");
 
-        bind(form.contractDate, "contractDate", "change");
-        bind(form.startDate, "startDate", "change");
+        // contractDate / startDate は任意化のため live clear 対象外
       };
       wireLiveClear();
 
@@ -829,10 +838,10 @@
         [
           "salesName","customerName","propertyName","roomNo",
           "brokerFeeBaseYen","brokerFeeDiscountYen","brokerFeeClaimYen",
-          "adPercent","adClaimYen",
-          "contractDate","startDate"
+          "adPercent","adClaimYen"
         ].forEach(k => showError(k, false));
 
+        // 任意項目（契約日/開始日）はエラー表示しない運用なので、ここでも触らない
         msg.textContent = "";
       });
     })();
