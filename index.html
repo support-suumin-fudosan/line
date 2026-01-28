@@ -184,6 +184,11 @@
       font-size: 12px;
       font-weight: 700;
     }
+    .section-title .opt{
+      color: #556070;
+      font-size: 12px;
+      font-weight: 700;
+    }
 
     .field{
       display: grid;
@@ -192,7 +197,7 @@
       min-width: 0;
     }
 
-    /* 幅を若干小さく（営業担当名/顧客名/物件名/号室） */
+    /* 幅を若干小さく（営業担当名/顧客名/顧客LINE名/物件名/号室） */
     .field.narrow input[type="text"]{
       max-width: 520px;
     }
@@ -208,7 +213,8 @@
 
     input[type="text"],
     input[type="date"],
-    input[type="number"]{
+    input[type="number"],
+    textarea{
       width: 100%;
       border: 1px solid var(--line);
       border-radius: var(--radius-md);
@@ -220,9 +226,17 @@
       max-width: 100%;
     }
 
-    input::placeholder{ color: #9aa3af; }
+    textarea{
+      min-height: 96px;
+      resize: vertical;
+      line-height: 1.55;
+    }
 
-    input:focus{
+    input::placeholder,
+    textarea::placeholder{ color: #9aa3af; }
+
+    input:focus,
+    textarea:focus{
       border-color: rgba(31,157,99,0.55);
       box-shadow: 0 0 0 4px rgba(31,157,99,0.12);
       background: #fcfffd;
@@ -301,6 +315,10 @@
       font-size: 11.5px;
       color: var(--muted);
       line-height: 1.6;
+    }
+    .hint.small{
+      font-size: 11px;
+      color: #6b7280;
     }
 
     .error{
@@ -417,6 +435,12 @@
       gap: 8px;
       margin: 0;
     }
+
+    .notes-wrap{
+      margin-top: 12px;
+      display: grid;
+      gap: 8px;
+    }
   </style>
 </head>
 
@@ -461,10 +485,18 @@
           </div>
 
           <div class="grid-2">
-            <div class="field narrow">
-              <div class="section-title">顧客名 <span class="req">必須</span></div>
-              <input id="customerName" name="customerName" type="text" required />
-              <div class="error" data-error-for="customerName">顧客名を入力してください。</div>
+            <div>
+              <div class="field narrow">
+                <div class="section-title">顧客名 <span class="req">必須</span></div>
+                <input id="customerName" name="customerName" type="text" required />
+                <div class="error" data-error-for="customerName">顧客名を入力してください。</div>
+              </div>
+
+              <!-- 追加：顧客LINE名（任意） -->
+              <div class="field narrow" style="margin-top:-4px;">
+                <div class="section-title">顧客LINE名 <span class="opt">任意</span></div>
+                <input id="customerLineName" name="customerLineName" type="text" />
+              </div>
             </div>
 
             <div class="field narrow">
@@ -576,6 +608,13 @@
                 <div class="mini-label">契約開始日（起算日）</div>
                 <input id="startDate" name="startDate" type="date" required />
                 <div class="error" data-error-for="startDate">契約開始日（起算日）を選択してください。</div>
+
+                <!-- 追加：備考 -->
+                <div class="notes-wrap">
+                  <div class="mini-label" style="margin-top:2px;">備考</div>
+                  <textarea id="notes" name="notes"></textarea>
+                  <div class="hint small">契約にあたり特筆事項があれば記入してください。</div>
+                </div>
               </div>
             </div>
           </div>
@@ -680,6 +719,8 @@
 
           salesName: clean(form.salesName.value),
           customerName: clean(form.customerName.value),
+          customerLineName: clean(form.customerLineName.value),
+
           propertyName: clean(form.propertyName.value),
           roomNo: clean(form.roomNo.value),
 
@@ -691,7 +732,9 @@
           adClaimYen: String(form.adClaimYen.value ?? "").trim(),
 
           contractDate: String(form.contractDate.value ?? "").trim(),
-          startDate: String(form.startDate.value ?? "").trim()
+          startDate: String(form.startDate.value ?? "").trim(),
+
+          notes: clean(form.notes.value)
         };
       };
 
