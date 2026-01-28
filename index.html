@@ -192,6 +192,16 @@
       min-width: 0;
     }
 
+    /* 幅を若干小さく（営業担当名/顧客名/物件名/号室） */
+    .field.narrow input[type="text"]{
+      max-width: 520px;
+    }
+    @media (min-width: 720px){
+      .field.narrow input[type="text"]{
+        max-width: 480px;
+      }
+    }
+
     .field.compact{
       margin-bottom: 14px;
     }
@@ -251,10 +261,7 @@
       font-weight: 700;
       margin: 0 0 6px;
     }
-    /* 「入力枠（円）」の見出しは非表示 */
-    .mini-label.is-hidden{
-      display: none;
-    }
+    .mini-label.is-hidden{ display: none; }
 
     .input-wrap{
       display: flex;
@@ -447,20 +454,20 @@
 
       <form id="answerForm" novalidate>
         <div class="section">
-          <div class="field">
+          <div class="field narrow">
             <div class="section-title">営業担当名 <span class="req">必須</span></div>
             <input id="salesName" name="salesName" type="text" required />
             <div class="error" data-error-for="salesName">営業担当名を入力してください。</div>
           </div>
 
           <div class="grid-2">
-            <div class="field">
+            <div class="field narrow">
               <div class="section-title">顧客名 <span class="req">必須</span></div>
               <input id="customerName" name="customerName" type="text" required />
               <div class="error" data-error-for="customerName">顧客名を入力してください。</div>
             </div>
 
-            <div class="field">
+            <div class="field narrow">
               <div class="section-title">物件名 <span class="req">必須</span></div>
               <input id="propertyName" name="propertyName" type="text" required />
               <div class="error" data-error-for="propertyName">物件名を入力してください。</div>
@@ -468,7 +475,7 @@
           </div>
 
           <div class="grid-2">
-            <div class="field compact">
+            <div class="field compact narrow">
               <div class="section-title">号室 <span class="req">必須</span></div>
               <input id="roomNo" name="roomNo" type="text" required />
               <div class="error" data-error-for="roomNo">号室を入力してください。</div>
@@ -525,11 +532,21 @@
 
             <div class="calc-block">
               <div class="calc-row" style="grid-template-columns: 1fr; gap: 12px;">
-                <div>
-                  <div class="mini-label">のため</div>
-                  <div class="input-wrap">
-                    <input id="adClaimYen" name="adClaimYen" type="number" inputmode="numeric" min="0" step="1" required />
-                    <span class="unit">円</span>
+                <div class="grid-2" style="gap:12px;">
+                  <div>
+                    <div class="mini-label is-hidden">入力枠（%）</div>
+                    <div class="input-wrap">
+                      <input id="adPercent" name="adPercent" type="number" inputmode="decimal" min="0" step="0.01" required />
+                      <span class="unit">%</span>
+                    </div>
+                  </div>
+
+                  <div>
+                    <div class="mini-label">のため</div>
+                    <div class="input-wrap">
+                      <input id="adClaimYen" name="adClaimYen" type="number" inputmode="numeric" min="0" step="1" required />
+                      <span class="unit">円</span>
+                    </div>
                   </div>
                 </div>
 
@@ -539,6 +556,7 @@
               </div>
             </div>
 
+            <div class="error" data-error-for="adPercent">AD（%）を入力してください。</div>
             <div class="error" data-error-for="adClaimYen">AD（円）を入力してください。</div>
           </div>
         </div>
@@ -627,6 +645,7 @@
         brokerFeeDiscountYen: () => form.brokerFeeDiscountYen.value !== "" && Number(form.brokerFeeDiscountYen.value) >= 0,
         brokerFeeClaimYen: () => form.brokerFeeClaimYen.value !== "" && Number(form.brokerFeeClaimYen.value) >= 0,
 
+        adPercent: () => form.adPercent.value !== "" && Number(form.adPercent.value) >= 0,
         adClaimYen: () => form.adClaimYen.value !== "" && Number(form.adClaimYen.value) >= 0,
 
         contractDate: () => !!form.contractDate.value,
@@ -638,7 +657,7 @@
         const keys = [
           "salesName","customerName","propertyName","roomNo",
           "brokerFeeBaseYen","brokerFeeDiscountYen","brokerFeeClaimYen",
-          "adClaimYen",
+          "adPercent","adClaimYen",
           "contractDate","startDate"
         ];
 
@@ -668,6 +687,7 @@
           brokerFeeDiscountYen: String(form.brokerFeeDiscountYen.value ?? "").trim(),
           brokerFeeClaimYen: String(form.brokerFeeClaimYen.value ?? "").trim(),
 
+          adPercent: String(form.adPercent.value ?? "").trim(),
           adClaimYen: String(form.adClaimYen.value ?? "").trim(),
 
           contractDate: String(form.contractDate.value ?? "").trim(),
@@ -720,6 +740,7 @@
         bind(form.brokerFeeDiscountYen, "brokerFeeDiscountYen");
         bind(form.brokerFeeClaimYen, "brokerFeeClaimYen");
 
+        bind(form.adPercent, "adPercent");
         bind(form.adClaimYen, "adClaimYen");
 
         bind(form.contractDate, "contractDate", "change");
@@ -765,7 +786,7 @@
         [
           "salesName","customerName","propertyName","roomNo",
           "brokerFeeBaseYen","brokerFeeDiscountYen","brokerFeeClaimYen",
-          "adClaimYen",
+          "adPercent","adClaimYen",
           "contractDate","startDate"
         ].forEach(k => showError(k, false));
 
