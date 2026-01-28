@@ -172,7 +172,7 @@
       border-radius: 999px;
       font-size: 12px;
       color: var(--accent-2);
-      font-weight: 600;
+      font-weight: 700;
       margin-left: -2px;
       transform: translateY(-2px);
       width: fit-content;
@@ -217,12 +217,12 @@
       gap: 8px;
       margin: 0 0 10px;
       font-size: 15px;
-      font-weight: 700;
+      font-weight: 800;
     }
     .section-title .req{
       color: var(--danger);
       font-size: 12px;
-      font-weight: 700;
+      font-weight: 800;
     }
 
     .field{
@@ -230,10 +230,6 @@
       gap: 8px;
       margin-bottom: 16px;
       min-width: 0;
-    }
-
-    .field.compact{
-      margin-bottom: 14px;
     }
 
     input[type="text"],
@@ -250,8 +246,6 @@
       max-width: 100%;
     }
 
-    input::placeholder{ color: #9aa3af; }
-
     input:focus{
       border-color: rgba(31,157,99,0.55);
       box-shadow: 0 0 0 4px rgba(31,157,99,0.12);
@@ -262,12 +256,21 @@
       display: grid;
       gap: 16px;
       grid-template-columns: 1fr;
+      align-items: start;
     }
     @media (min-width: 720px){
       .grid-2{ grid-template-columns: 1fr 1fr; }
     }
 
-    /* 横並びの式入力 */
+    /* カレンダーは横長じゃなくてOK（自然な幅） */
+    .date-input{
+      max-width: 260px;
+    }
+    @media (max-width: 719px){
+      .date-input{ max-width: 100%; }
+    }
+
+    /* 式入力 */
     .calc-block{
       border: 1px solid rgba(0,0,0,0.06);
       background: linear-gradient(135deg, #ffffff, #ffffff 60%, rgba(31,157,99,0.06));
@@ -279,7 +282,7 @@
       display: grid;
       grid-template-columns: 1fr;
       gap: 10px;
-      align-items: center;
+      align-items: start;
     }
     @media (min-width: 720px){
       .calc-row{ grid-template-columns: 1fr 1fr 1fr; }
@@ -288,7 +291,7 @@
     .mini-label{
       font-size: 12px;
       color: #374151;
-      font-weight: 700;
+      font-weight: 800;
       margin: 0 0 6px;
     }
 
@@ -303,7 +306,7 @@
       flex: 0 0 auto;
       font-size: 13px;
       color: var(--muted);
-      font-weight: 700;
+      font-weight: 800;
       letter-spacing: 0.02em;
       padding: 2px 6px;
       border-radius: 999px;
@@ -311,19 +314,19 @@
       border: 1px solid rgba(0,0,0,0.06);
     }
 
-    .op{
-      display: none;
-    }
-    @media (min-width: 720px){
-      .op{
-        display: block;
-        text-align: center;
-        color: var(--muted);
-        font-weight: 800;
-        letter-spacing: 0.06em;
-        font-size: 12px;
-        padding-top: 18px;
-      }
+    /* 「から / 割引し、 / のため」等を同じ見た目で */
+    .phrase{
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: rgba(15,23,42,0.04);
+      border: 1px solid rgba(0,0,0,0.06);
+      white-space: nowrap;
+      align-self: center;
+      justify-self: center;
     }
 
     .hint{
@@ -335,7 +338,7 @@
     .error{
       color: var(--danger);
       font-size: 11.5px;
-      font-weight: 600;
+      font-weight: 700;
       display: none;
     }
 
@@ -350,7 +353,7 @@
       border-radius: 14px;
       padding: 14px 14px;
       font-size: 16px;
-      font-weight: 800;
+      font-weight: 900;
       cursor: pointer;
       transition: transform .08s ease, filter .15s ease, box-shadow .15s ease;
     }
@@ -359,7 +362,6 @@
       color: white;
       box-shadow: 0 10px 18px rgba(31,157,99,0.22);
     }
-    .btn-primary:hover{ filter: brightness(1.02); }
     .btn-primary:active{ transform: translateY(1px); }
 
     .btn-ghost{
@@ -423,7 +425,7 @@
 
     .done-kicker{
       font-size: 11.5px;
-      font-weight: 800;
+      font-weight: 900;
       color: var(--accent-2);
       letter-spacing: 0.08em;
       margin-bottom: 2px;
@@ -445,7 +447,7 @@
     .thankyou-secondary{
       font-size: 12.5px;
       color: #556070;
-      font-weight: 700;
+      font-weight: 800;
       margin: 0;
     }
 
@@ -539,16 +541,30 @@
 
             <div class="field">
               <div class="section-title">物件名 <span class="req">必須</span></div>
-              <input id="propertyName" name="propertyName" type="text" placeholder="例：RELUXIA隅田八広" required />
+              <input id="propertyName" name="propertyName" type="text" required />
               <div class="error" data-error-for="propertyName">物件名を入力してください。</div>
             </div>
           </div>
 
           <div class="grid-2">
-            <div class="field compact">
+            <div class="field">
               <div class="section-title">号室 <span class="req">必須</span></div>
-              <input id="roomNo" name="roomNo" type="text" placeholder="例：403" required />
+              <input id="roomNo" name="roomNo" type="text" required />
               <div class="error" data-error-for="roomNo">号室を入力してください。</div>
+            </div>
+
+            <div class="field">
+              <div class="section-title">契約日 <span class="req">必須</span></div>
+              <input class="date-input" id="contractDate" name="contractDate" type="date" required />
+              <div class="error" data-error-for="contractDate">契約日を選択してください。</div>
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div class="field">
+              <div class="section-title">契約開始日（起算日） <span class="req">必須</span></div>
+              <input class="date-input" id="startDate" name="startDate" type="date" required />
+              <div class="error" data-error-for="startDate">契約開始日（起算日）を選択してください。</div>
             </div>
             <div></div>
           </div>
@@ -557,42 +573,42 @@
             <div class="section-title">仲介手数料 <span class="req">必須</span></div>
 
             <div class="calc-block">
-              <div class="calc-row">
-                <div>
-                  <div class="mini-label">入力枠（円）</div>
-                  <div class="input-wrap">
-                    <input id="brokerFeeBaseYen" name="brokerFeeBaseYen" type="number" inputmode="numeric" min="0" step="1" required />
-                    <span class="unit">円</span>
+              <div class="calc-row" style="grid-template-columns: 1fr; gap: 12px;">
+                <div style="display:flex; gap:10px; align-items:flex-end; flex-wrap:wrap;">
+                  <div style="min-width:200px; flex:1 1 220px;">
+                    <div class="mini-label">金額</div>
+                    <div class="input-wrap">
+                      <input id="brokerFeeBaseYen" name="brokerFeeBaseYen" type="number" inputmode="numeric" min="0" step="1" required />
+                      <span class="unit">円</span>
+                    </div>
                   </div>
-                </div>
 
-                <div class="op">−</div>
+                  <span class="phrase">から</span>
 
-                <div>
-                  <div class="mini-label">入力枠（円）割引</div>
-                  <div class="input-wrap">
-                    <input id="brokerFeeDiscountYen" name="brokerFeeDiscountYen" type="number" inputmode="numeric" min="0" step="1" required />
-                    <span class="unit">円</span>
+                  <div style="min-width:200px; flex:1 1 220px;">
+                    <div class="mini-label">割引額</div>
+                    <div class="input-wrap">
+                      <input id="brokerFeeDiscountYen" name="brokerFeeDiscountYen" type="number" inputmode="numeric" min="0" step="1" required />
+                      <span class="unit">円</span>
+                    </div>
                   </div>
-                </div>
 
-                <div class="op">＝</div>
+                  <span class="phrase">割引し、</span>
 
-                <div>
-                  <div class="mini-label">入力枠（円）請求</div>
-                  <div class="input-wrap">
-                    <input id="brokerFeeClaimYen" name="brokerFeeClaimYen" type="number" inputmode="numeric" min="0" step="1" required />
-                    <span class="unit">円</span>
+                  <div style="min-width:200px; flex:1 1 220px;">
+                    <div class="mini-label">請求額</div>
+                    <div class="input-wrap">
+                      <input id="brokerFeeClaimYen" name="brokerFeeClaimYen" type="number" inputmode="numeric" min="0" step="1" required />
+                      <span class="unit">円</span>
+                    </div>
                   </div>
-                </div>
-              </div>
 
-              <div class="hint" style="margin-top:10px;">
-                「入力枠」円から「入力枠」円割引し、「入力枠」請求する。
+                  <span class="phrase">請求する。</span>
+                </div>
               </div>
             </div>
 
-            <div class="error" data-error-for="brokerFeeBaseYen">仲介手数料（入力枠）を入力してください。</div>
+            <div class="error" data-error-for="brokerFeeBaseYen">仲介手数料金額を入力してください。</div>
             <div class="error" data-error-for="brokerFeeDiscountYen">割引額を入力してください。</div>
             <div class="error" data-error-for="brokerFeeClaimYen">請求額を入力してください。</div>
           </div>
@@ -601,49 +617,31 @@
             <div class="section-title">AD <span class="req">必須</span></div>
 
             <div class="calc-block">
-              <div class="calc-row" style="grid-template-columns: 1fr; gap: 12px;">
-                <div class="grid-2" style="gap:12px;">
-                  <div>
-                    <div class="mini-label">入力枠（%）</div>
-                    <div class="input-wrap">
-                      <input id="adPercent" name="adPercent" type="number" inputmode="decimal" min="0" step="0.01" required />
-                      <span class="unit">%</span>
-                    </div>
-                  </div>
-
-                  <div>
-                    <div class="mini-label">入力枠（円）請求</div>
-                    <div class="input-wrap">
-                      <input id="adClaimYen" name="adClaimYen" type="number" inputmode="numeric" min="0" step="1" required />
-                      <span class="unit">円</span>
-                    </div>
+              <div style="display:flex; gap:10px; align-items:flex-end; flex-wrap:wrap;">
+                <div style="min-width:200px; flex:1 1 220px;">
+                  <div class="mini-label">比率</div>
+                  <div class="input-wrap">
+                    <input id="adPercent" name="adPercent" type="number" inputmode="decimal" min="0" step="0.01" required />
+                    <span class="unit">%</span>
                   </div>
                 </div>
 
-                <div class="hint">
-                  「入力枠」%で「入力枠」円請求する。
+                <span class="phrase">のため</span>
+
+                <div style="min-width:220px; flex:1 1 240px;">
+                  <div class="mini-label">請求額</div>
+                  <div class="input-wrap">
+                    <input id="adClaimYen" name="adClaimYen" type="number" inputmode="numeric" min="0" step="1" required />
+                    <span class="unit">円</span>
+                  </div>
                 </div>
+
+                <span class="phrase">請求する。</span>
               </div>
             </div>
 
             <div class="error" data-error-for="adPercent">AD（%）を入力してください。</div>
             <div class="error" data-error-for="adClaimYen">AD（円）を入力してください。</div>
-          </div>
-        </div>
-
-        <div class="section contact-section">
-          <div class="grid-2">
-            <div class="field">
-              <div class="section-title">契約日 <span class="req">必須</span></div>
-              <input id="contractDate" name="contractDate" type="date" required />
-              <div class="error" data-error-for="contractDate">契約日を選択してください。</div>
-            </div>
-
-            <div class="field">
-              <div class="section-title">契約開始日（起算日） <span class="req">必須</span></div>
-              <input id="startDate" name="startDate" type="date" required />
-              <div class="error" data-error-for="startDate">契約開始日（起算日）を選択してください。</div>
-            </div>
           </div>
         </div>
 
